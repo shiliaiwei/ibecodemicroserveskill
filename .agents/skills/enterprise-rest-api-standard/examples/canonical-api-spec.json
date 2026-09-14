@@ -1,0 +1,289 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Canonical Enterprise RESTful API Blueprint",
+    "version": "1.4.0",
+    "description": "Exemplary OpenAPI 3.1 specification implementing WSO2, OAGi v2.0, N2WS CPM, and RFC 7231/7807/8594 standards."
+  },
+  "servers": [
+    {
+      "url": "https://api.domain.com/hr/v1",
+      "description": "Production API Gateway"
+    }
+  ],
+  "paths": {
+    "/associates": {
+      "get": {
+        "summary": "List associates with OData 4.0 filtering, sorting, and read-consistent pagination",
+        "parameters": [
+          {
+            "name": "$select",
+            "in": "query",
+            "description": "Comma-separated property projection",
+            "schema": { "type": "string" }
+          },
+          {
+            "name": "$expand",
+            "in": "query",
+            "description": "Inline relation expansion with optional sub-queries",
+            "schema": { "type": "string" }
+          },
+          {
+            "name": "$filter",
+            "in": "query",
+            "description": "OData boolean filter expression",
+            "schema": { "type": "string" }
+          },
+          {
+            "name": "$orderby",
+            "in": "query",
+            "description": "Comma-separated sort expressions",
+            "schema": { "type": "string" }
+          },
+          {
+            "name": "$top",
+            "in": "query",
+            "description": "Maximum records to return (default 10)",
+            "schema": { "type": "integer", "default": 10 }
+          },
+          {
+            "name": "$skip",
+            "in": "query",
+            "description": "Records to skip",
+            "schema": { "type": "integer", "default": 0 }
+          },
+          {
+            "name": "$count",
+            "in": "query",
+            "description": "Include total count in metadata",
+            "schema": { "type": "boolean", "default": false }
+          },
+          {
+            "name": "resourceSetSaveIndicator",
+            "in": "query",
+            "description": "Request server to freeze/cache the instance resource set for read consistency",
+            "schema": { "type": "boolean", "default": false }
+          },
+          {
+            "name": "resourceSetID",
+            "in": "query",
+            "description": "Frozen snapshot ID returned from initial query",
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Paginated collection response envelope",
+            "headers": {
+              "ETag": { "schema": { "type": "string" } },
+              "Last-Modified": { "schema": { "type": "string" } }
+            },
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/PaginatedAssociatesResponse" }
+              }
+            }
+          },
+          "304": { "description": "Not Modified (cache hit via If-None-Match)" },
+          "400": { "$ref": "#/components/responses/ErrorResponse" },
+          "401": { "$ref": "#/components/responses/UnauthorizedResponse" },
+          "403": { "$ref": "#/components/responses/ForbiddenResponse" }
+        }
+      },
+      "post": {
+        "summary": "Create associate",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/AssociateInput" }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Associate created successfully",
+            "headers": {
+              "Location": { "schema": { "type": "string" } },
+              "ETag": { "schema": { "type": "string" } }
+            },
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Associate" }
+              }
+            }
+          },
+          "400": { "$ref": "#/components/responses/ErrorResponse" }
+        }
+      }
+    },
+    "/associates/save-resource-set": {
+      "post": {
+        "summary": "Pattern for large URIs or sensitive PII query data",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "taxIdentifier": { "type": "string" },
+                  "salaryRange": { "type": "string" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Transient resource set created",
+            "headers": {
+              "Location": {
+                "description": "URL to query the saved resource set",
+                "schema": { "type": "string" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/associates/{id}/hire": {
+      "post": {
+        "summary": "Controller Resource: Procedural action to hire an associate",
+        "parameters": [
+          { "name": "id", "in": "path", "required": true, "schema": { "type": "string" } }
+        ],
+        "responses": {
+          "200": {
+            "description": "Hire operation executed",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ConfirmMessageEnvelope" }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "PaginatedAssociatesResponse": {
+        "type": "object",
+        "required": ["paginationResponse", "results"],
+        "properties": {
+          "paginationResponse": {
+            "type": "object",
+            "properties": {
+              "startSequenceNumber": { "type": "integer" },
+              "returnedNumber": { "type": "integer" },
+              "totalNumber": { "type": "integer" },
+              "completeIndicator": { "type": "boolean" },
+              "resourceSetID": { "type": "string" }
+            }
+          },
+          "results": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/Associate" }
+          }
+        }
+      },
+      "Associate": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "string" },
+          "personName": { "type": "string" },
+          "status": { "type": "string" },
+          "links": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/Link" }
+          }
+        }
+      },
+      "AssociateInput": {
+        "type": "object",
+        "required": ["personName"],
+        "properties": {
+          "personName": { "type": "string" },
+          "birthDate": { "type": "string", "format": "date" }
+        }
+      },
+      "Link": {
+        "type": "object",
+        "required": ["href", "rel"],
+        "properties": {
+          "href": { "type": "string" },
+          "rel": { "type": "string" },
+          "method": { "type": "string", "enum": ["GET", "POST", "PUT", "PATCH", "DELETE"] },
+          "title": { "type": "string" },
+          "mediaType": { "type": "string" }
+        }
+      },
+      "ConfirmMessageEnvelope": {
+        "type": "object",
+        "required": ["confirmMessage"],
+        "properties": {
+          "confirmMessage": {
+            "type": "object",
+            "properties": {
+              "messageID": { "type": "string" },
+              "messageDateTime": { "type": "string", "format": "date-time" },
+              "requestProcessingStatusCode": { "type": "string", "enum": ["received", "validated", "started", "completed"] },
+              "requestResultStatusCode": { "type": "string", "enum": ["succeeded", "partiallyFailed", "failed"] },
+              "messages": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "messageCode": { "type": "string" },
+                    "messageTypeCode": { "type": "string", "enum": ["success", "warning", "error", "info"] },
+                    "message": { "type": "string" }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "ErrorEnvelope": {
+        "type": "object",
+        "required": ["code", "message"],
+        "properties": {
+          "code": { "type": "integer" },
+          "message": { "type": "string" },
+          "description": { "type": "string" },
+          "moreInfo": { "type": "string", "format": "uri" },
+          "error": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "code": { "type": "integer" },
+                "message": { "type": "string" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "responses": {
+      "ErrorResponse": {
+        "description": "Validation or client-side error",
+        "content": {
+          "application/json": {
+            "schema": { "$ref": "#/components/schemas/ErrorEnvelope" }
+          }
+        }
+      },
+      "UnauthorizedResponse": {
+        "description": "Authentication required",
+        "headers": {
+          "WWW-Authenticate": { "schema": { "type": "string" } }
+        }
+      },
+      "ForbiddenResponse": {
+        "description": "Insufficient permissions (empty body for fingerprinting defense)"
+      }
+    }
+  }
+}

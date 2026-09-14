@@ -216,6 +216,24 @@ Every microservice and REST endpoint must strictly enforce:
 
 ---
 
+### Domain 10: Configuration Vulnerabilities & Cross-Dependency Defense (May et al., VaMoS 2024)
+Synthesizing empirical research analyzing 10 years of developer vulnerabilities on Stack Overflow:
+* **The Configuration Risk Spectrum**: Most exploited vulnerabilities originate not from core algorithm bugs, but from **faulty security configurations (204 discussions), Spring Framework misconfigurations (102 posts), web application server settings (150 posts), and third-party dependency interactions (53 posts)**.
+* **Spring Security Misconfiguration Hardening**:
+  - Never use `.csrf().disable()` on browser-facing endpoints. CSRF protection is mandatory for cookie-based session flows.
+  - Avoid wildcard CORS (`allowedOrigins("*")`). Explicitly whitelist trusted frontend subdomains (`https://*.ideaischool.edu`).
+  - Enforce explicit security matchers (`requestMatchers("/api/v1/admin/**").hasRole("ADMIN")`) before `.anyRequest().authenticated()`.
+* **Cross-Configuration & Container Interaction Verification**:
+  - Audit interactions between application frameworks (Spring Boot), embedded web servers (Tomcat/Netty), and reverse proxies (NGINX/Gateway).
+  - Explicitly disable Tomcat directory listing, HTTP TRACE method, and server header banners (`server.server-header=""`).
+* **Automated Dependency Vulnerability Scanning**:
+  - Implement automated Software Bill of Materials (SBOM) generation via CycloneDX/SPDX.
+  - Enforce CI/CD pipeline blocking on any dependency containing CVSS score $\ge 7.0$ (e.g. OWASP Dependency-Check / Snyk / Dependabot).
+* **ISO/IEC 27001 Security Engineering Phase**:
+  - Incorporate a pre-release configuration risk assessment phase to verify environment properties (`dev`, `staging`, `prod`) against configuration drift.
+
+---
+
 ## 3. Production Verification Protocol
 
 Before certifying any API endpoint or microservice for production release, verify using the security validation suite:

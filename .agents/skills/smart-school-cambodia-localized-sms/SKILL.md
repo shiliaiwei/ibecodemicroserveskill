@@ -64,10 +64,18 @@ This skill governs the platform's localized implementations across the Kingdom o
    - **Universities**: Multi-faculty governance, CATS credit transfers, thesis defense milestones, and degree audits.
 6. **Directive K-06 (City Distributor Network Operations)**:
    - System onboarding workflows MUST support distributed training and localization desks for Phnom Penh, Siem Reap, Battambang, Sihanoukville, and Kampong Cham.
-7. **Directive K-07 (Sub-45s Classroom Attendance & Mobile Parity)**:
-   - Classroom roll-calls MUST execute in under 45 seconds per section with immediate offline SQLite sync and mobile responsiveness.
+7. **Directive K-07 (Sub-45s Classroom Attendance & Dual-Client Offline Parity)**:
+   - Classroom roll-calls MUST execute in under 45 seconds per section with immediate local database persistence and automatic cloud synchronization upon reconnection.
+   - **Native Android Engine**: Android Room SQLite + WorkManager background synchronization.
+   - **Web Browser Engine**: IndexedDB (via Dexie.js) or SQLite compiled to WebAssembly (WASM via OPFS) + Service Worker PWA Background Sync.
+   - **Offline UX Contract**: Writes complete in $< 10\text{ ms}$ locally with `syncStatus = 'PENDING'`. Sync resumes automatically via browser `online` events without user intervention.
 8. **Directive K-08 (Strict Zero Emoji Directive)**:
    - Zero emojis across all Cambodian ministry marksheets, student dossiers, Bakong receipts, and system documentation. Use Google Material Symbols Outlined exclusively.
+9. **Directive K-09 (Dynamic REST API Localization & UI Test Automation - Gupta, EJAET 2019)**:
+   - **Decoupled Localization Service**: Eliminate brittle static resource files and hardcoded strings. UI labels, tooltips, and element identifiers MUST be served dynamically via a dedicated REST API (`/api/v1/localization/{bundleId}/{screenId}/{languageId}`).
+   - **Supported Locales**: `km` (Khmer - Google Sans Khmer / Moul), `en` (English - Ubuntu/Inter), and `zh` (Chinese - Noto Sans SC).
+   - **Dynamic Data Binding in Automated Testing**: End-to-end UI automation (Playwright / Cypress) MUST dynamically bind element IDs and expected translated strings from the localization API at test runtime, eliminating test brittleness across languages.
+   - **Zero Grapheme Distortion**: The localization engine automatically injects zero-width word delimiters (`\u200B`) for Khmer text before returning payloads to frontend renderers.
 
 ---
 
@@ -77,3 +85,4 @@ For exhaustive technical schemas, REST contracts, and architectural workflows, a
 - **Master Feature Catalog**: [`references/56_MASTER_FEATURE_CATALOG_AND_IMPLEMENTATION_INVENTORY.md`](file:///Users/Apple16/Desktop/skill-ibecode-pipeline/references/56_MASTER_FEATURE_CATALOG_AND_IMPLEMENTATION_INVENTORY.md) (Section 26: Features 331 to 350)
 - **Primary Skills Directory**: [`references/57_PRIMARY_SKILLS_DIRECTORY_AND_ORCHESTRATION_SPEC.md`](file:///Users/Apple16/Desktop/skill-ibecode-pipeline/references/57_PRIMARY_SKILLS_DIRECTORY_AND_ORCHESTRATION_SPEC.md) ([P-18])
 - **Audit Compendium**: [`references/68_MASTER_SKILLS_CHECKLISTS_AND_OPERATIONAL_AUDIT_COMPENDIUM.md`](file:///Users/Apple16/Desktop/skill-ibecode-pipeline/references/68_MASTER_SKILLS_CHECKLISTS_AND_OPERATIONAL_AUDIT_COMPENDIUM.md) (Suite 16 Quality Gates)
+

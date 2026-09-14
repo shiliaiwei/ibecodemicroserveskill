@@ -177,6 +177,10 @@ Every pattern is calibrated to the **Liquid Glass Design System** (`liquid-glass
   - Sticky glass header, column sorting glyphs, column reordering, column visibility dropdown.
   - Row selection checkboxes with floating bulk action bar (`Export Selected`, `Bulk Delete`).
   - Virtualized row scrolling supporting 5,000+ records at 60 FPS.
+  - **Offline Client Storage (Web Local DB - Directive K-07 Parity)**:
+    - High-frequency tables (e.g. Daily Attendance Roster, Offline Marksheet Entry) utilize **IndexedDB (via Dexie.js)** or **SQLite WASM via OPFS** for local caching.
+    - Enables instantaneous record creation and roll-call entry ($< 10\text{ ms}$) in offline/low-connectivity environments.
+    - Automatically syncs pending deltas (`syncStatus = 'PENDING'`) via PWA Service Worker Background Sync when internet connectivity is restored.
 
 #### Pattern 14: Single Item Detail Dossier (`Single Item Detail`)
 - **Visual Design**: 360-degree comprehensive entity profile (e.g. Student 360 Dossier).
@@ -190,6 +194,11 @@ Every pattern is calibrated to the **Liquid Glass Design System** (`liquid-glass
   - Search query summary: "Found 48 results for 'Mathematics Class 1'".
   - Sidebar filters: Subject, Grade Level, Price Range, Availability.
   - Highlighted search query terms in titles and descriptions.
+  - **Option B Query Parameter Standard (Filtering, Searching & Collections)**:
+    - All filter states, search terms, and sort orders MUST sync bidirectionally with browser URL query parameters:
+      `?search=math&grade=10&status=ACTIVE&page=0&size=20&sort=name,asc`
+    - Preserves deep-linkability, browser back/forward history, and bookmarkable searches.
+    - Prevents URL namespace collisions by maintaining clean base resource endpoints (`GET /api/v1/students?...`).
 
 #### Pattern 16: Empty State (`Empty State`)
 - **Visual Design**: Centered Liquid Glass card for zero-data views.

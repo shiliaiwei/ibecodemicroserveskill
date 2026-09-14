@@ -139,10 +139,11 @@ It operationalizes the **6 Inviolable Pillars of Well-Architected Microservices*
 - [ ] **Request Timeouts**: Strict HTTP connect timeout (1,000ms) and read timeout (3,000ms) on all inter-service REST clients (OpenFeign).
 - [ ] **Directive 02 Async Decoupling**: Heavy tasks (Payroll calculation, Admit card rendering, Auto-invoicing) decoupled via Kafka message streams, immediately returning `202 Accepted` to HTTP callers.
 
-#### 3.3. Backup, Disaster Recovery & RTO/RPO
-- [ ] **RTO (Recovery Time Objective)**: `< 15 minutes` for complete service restoration.
-- [ ] **RPO (Recovery Point Objective)**: `< 1 minute` of data loss via Neon PostgreSQL continuous point-in-time recovery (WAL archiving).
-- [ ] **Automated Backup Validation**: Weekly automated sandbox restore drills restoring production database snapshots into isolated staging environments to prove backup viability.
+#### 3.4. Spring Boot Microservices Best Practices (Jani, EJAET 2020)
+- [ ] **Externalized Configuration**: Centralized property management via Spring Cloud Config Server backed by Git/Vault; environment profiles (`dev`, `staging`, `prod`) dynamically reloadable without pod rebuilds (`@RefreshScope`).
+- [ ] **Production Health & Actuator Telemetry**: Standardize Spring Boot Actuator endpoints (`/actuator/health`, `/actuator/metrics`, `/actuator/prometheus`) with readiness and liveness probes configured for Kubernetes automated pod restarts.
+- [ ] **Automated CI/CD & Multi-Level Testing**: Automated Maven/Gradle pipeline executing Unit Tests (JUnit 5 / Mockito), Integration Tests (`@SpringBootTest` with Testcontainers for PostgreSQL & Kafka), and API contract tests before container artifact build.
+- [ ] **Circuit Breakers & Cascading Prevention**: Resilience4j circuit breakers monitoring failure rates across service boundaries, tripping to open state when errors exceed 50% over a 10-second sliding window.
 
 ---
 

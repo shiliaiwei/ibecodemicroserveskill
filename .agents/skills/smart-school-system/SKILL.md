@@ -181,4 +181,16 @@ The **Teacher Portal** (`TEACHER`) is an instructional persona scoped strictly t
 ### Restricted 15 Modules (Strictly Omitted):
 - **Front Office**, **Fees Collection**, **Quick Fees**, **Income**, **Expenses**, **Library**, **Inventory**, **Transport**, **Hostel**, **Front CMS**, **Alumni**, **Annual Calendar**, **Student CV**, **Thermal Print**, **Whatsapp Messaging**.
 
+---
+
+## 7. Integrated High-Scale Microservices Skills Reference
+The platform's underlying enterprise microservices architecture strictly adheres to specialized authoritative skills:
+1. **API Gateway & Ingress Traffic**: [`smart-school-api-gateway-architecture`](file:///c:/Users/Students/Documents/ibecodemicroserveskill/.agents/skills/smart-school-api-gateway-architecture/SKILL.md) — Layer-7 Netty non-blocking ingress (`:8080`), perimeter JWT validation, Redis Token Bucket rate limiting, and BFF (Backend-For-Frontend) facades.
+2. **Digital Payment Engine**: [`smart-school-digital-payment-microservices`](file:///c:/Users/Students/Documents/ibecodemicroserveskill/.agents/skills/smart-school-digital-payment-microservices/SKILL.md) — Autonomous 5-component payment decomposition, idempotency key safeguards, dual-currency KHR/USD Bakong KHQR checkout, and Kafka decoupled receipts.
+3. **Event-Driven FinTech & CQRS**: [`smart-school-event-driven-fintech-cqrs`](file:///c:/Users/Students/Documents/ibecodemicroserveskill/.agents/skills/smart-school-event-driven-fintech-cqrs/SKILL.md) — 147k TPS sustained throughput, sub-100ms p99 latencies, 50-partition Kafka topics by account hash, immutable audit trails (SOX), and CQRS read/write separation.
+4. **API Security & Configuration Hardening**: [`smart-school-api-security-hardening`](file:///c:/Users/Students/Documents/ibecodemicroserveskill/.agents/skills/smart-school-api-security-hardening/SKILL.md) — Zero Trust mTLS, OAuth2 PKCE, Argon2id, and Domain 10 Configuration Vulnerabilities & Cross-Dependency Defense (May et al., 2024).
+5. **Dynamic REST Localization & UI Testing**: [`smart-school-cambodia-localized-sms`](file:///c:/Users/Students/Documents/ibecodemicroserveskill/.agents/skills/smart-school-cambodia-localized-sms/SKILL.md) — Directive K-09 runtime REST API localization (`/api/v1/locale/**`), automated dynamic UI test data binding (Gupta 2019), and zero-width word break delimiter (`\u200B`) injection.
+
+
+
 

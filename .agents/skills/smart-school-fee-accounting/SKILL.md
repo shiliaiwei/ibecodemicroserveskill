@@ -57,9 +57,9 @@ CLUSTER 2: SECURE COLLECTIONS & PAYMENT GATEWAYS
       - Canonical Copy: Connect multiple payment providers for smooth transactions.
       - Material Symbol: account_balance
       - Color Accent: Indigo Blue (#4338CA)
-      - Backend Microservice: PaymentGatewayHubService
+      - Backend Microservice: PaymentGatewayHubService (Ref: smart-school-digital-payment-microservices)
       - Entitlements: SUPER_ADMIN, CAMPUS_ADMIN, ACCOUNTANT
-      - Key Capabilities: Stripe, PayPal, Razorpay, PayU, Flutterwave, Authorize.Net, instant IPN webhook reconciler.
+      - Key Capabilities: Stripe, PayPal, Razorpay, Bakong KHQR, Wing, ABA PayWay, instant IPN webhook reconciler, idempotency key caching, async Kafka receipt dispatch.
 
   06. Payment History:
       - Canonical Copy: View detailed records of all past payments and receipts.

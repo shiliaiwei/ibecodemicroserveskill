@@ -24,6 +24,9 @@ The platform decomposes the 11 functional domains into seven (7) sovereign micro
 ├──────────────────────────┬──────────────────────┬──────────────────────────────────────┤
 │ Microservice Name        │ Port / Context Path  │ Functional Responsibility & Scope    │
 ├──────────────────────────┼──────────────────────┼──────────────────────────────────────┤
+│ 0. edge-gateway-service  │ :8080 /api/v1/**     │ Edge Ingress, JWT Perimeter Auth,    │
+│                          │                      │ Redis Rate Limiting, BFF Aggregation │
+├──────────────────────────┼──────────────────────┼──────────────────────────────────────┤
 │ 1. auth-tenant-service   │ :8081 /api/v1/auth   │ Identity, Authentication, JWT Tokens,│
 │                          │      /api/v1/tenants │ Multi-Branch Federation, RBAC Matrix.│
 ├──────────────────────────┼──────────────────────┼──────────────────────────────────────┤
@@ -34,7 +37,8 @@ The platform decomposes the 11 functional domains into seven (7) sovereign micro
 │                          │      /api/v1/notify  │ QR Ingest, DLT SMS, SES Email Push.  │
 ├──────────────────────────┼──────────────────────┼──────────────────────────────────────┤
 │ 4. finance-ledger-service│ :8084 /api/v1/finance │ Fee Schedules, Auto Invoicing, POS   │
-│                          │      /api/v1/fees    │ Cashier, Payment Gateways, Ledger.   │
+│                          │      /api/v1/fees    │ Cashier, Payment Gateways, Ledger    │
+│                          │      /api/v1/payments│ (Refs: digital-payment, fintech-cqrs)│
 ├──────────────────────────┼──────────────────────┼──────────────────────────────────────┤
 │ 5. assessment-exam-service:8085 /api/v1/exams   │ 5 Grading Models, Exam Timetables,   │
 │                          │      /api/v1/marks   │ Admit Cards, Bulk Marksheet PDFs.    │
@@ -43,7 +47,8 @@ The platform decomposes the 11 functional domains into seven (7) sovereign micro
 │                          │      /api/v1/payroll │ Automated Payroll, Leave Approvals.  │
 ├──────────────────────────┼──────────────────────┼──────────────────────────────────────┤
 │ 7. operations-hub-service│ :8087 /api/v1/transit│ Transport Fleet & GPS, Hostel Rooms, │
-│                          │      /api/v1/library │ Library Circulation, Visitor Passes. │
+│                          │      /api/v1/library │ Library Circulation, Visitor Passes, │
+│                          │      /api/v1/locale  │ Dynamic i18n API (Ref: Gupta 2019).  │
 └──────────────────────────┴──────────────────────┴──────────────────────────────────────┘
 ```
 
@@ -56,6 +61,8 @@ The platform decomposes the 11 functional domains into seven (7) sovereign micro
   - Core Framework        : Spring Boot 3.3.4
   - Concurrency Model     : Virtual Threads enabled (spring.threads.virtual.enabled=true)
   - Security Framework    : Spring Security 6.3 + Nimbus Jose JWT (Stateless Bearer Tokens)
+  - Security Hardening    : Ref: smart-school-api-security-hardening (Domain 10: May 2024)
+  - Dependency Scanning   : CycloneDX SBOM + OWASP Dependency-Check (CVSS >= 7.0 gate)
   - Persistence Engine    : Spring Data JPA / Hibernate 6.5 + Flyway Database Migrations
   - Primary Database      : Neon Serverless PostgreSQL 16 (Connection Pooling via HikariCP)
   - Caching & Rate Limit  : Redis 7.2 (Lettuce Driver, Sliding Window Token Bucket)
