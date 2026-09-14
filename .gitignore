@@ -1,0 +1,23 @@
+# OS files
+.DS_Store
+Thumbs.db
+
+# Heavy media & document formats
+*.mov
+*.mp4
+*.pptx
+*.ppt
+*.zip
+*.pdf
+*.docx
+*.wav
+*.mp3
+*.ogg
+*.aac
+*.db
+
+# Node / Python / Temp caches
+__pycache__/
+*.py[cod]
+.env
+.env.local
